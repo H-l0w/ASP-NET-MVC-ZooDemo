@@ -1,0 +1,34 @@
+﻿@model ZooDemo.Models.PavilonViewModel;
+
+@using System;
+@using ZooDemo.Objects;
+
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Seznam zvířat</title>
+    <link rel="stylesheet" href=~/css/Pavilon.css/>
+</head>
+<body>
+    <h1>Seznam pavilonů</h1>
+    <div class="pavilons">
+        @foreach(Pavilon pavilon in Model.Pavilons) {
+            <div class="pavilon">
+                <h3>@pavilon.Name</h3>
+                <h5>Seznam zvířat:</h5>
+                <div class="animals_in_pavilon">
+                    <ul>
+                    @foreach(Animal animal in pavilon.AnimalsInPavilon) {
+                        <li>@animal.Name</li>
+                    }
+                    </ul>
+                </div>
+                
+            </div>
+        }
+    </div>
+</body>

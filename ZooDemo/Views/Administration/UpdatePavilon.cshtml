@@ -1,0 +1,18 @@
+﻿@model ZooDemo.Objects.Pavilon
+@using ZooDemo.Objects;
+<link rel="stylesheet" href="/css/AddForm.css"/>
+
+<h1>Upravit pavilon - @Model.Name</h1>
+    <div class="error">
+        <h4>@ViewBag.Error</h4>
+    </div>
+<div class="form_div">
+    <div class="form">
+        @using (@Html.BeginForm("UpdatePavilon", "Administration", FormMethod.Post)){
+        <label>Jméno pavilonu</label>
+        <input type="text" name="Name" id="Name"/>
+        <button type="submit">Upravit</button>
+    }
+    </div>
+
+</div>

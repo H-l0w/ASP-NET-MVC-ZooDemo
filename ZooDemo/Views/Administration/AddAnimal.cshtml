@@ -1,0 +1,36 @@
+﻿@model ZooDemo.Models.AddUpdateAnimalViewModel
+@using ZooDemo.Objects;
+<link rel="stylesheet" href="/css/AddForm.css"/>
+
+
+<h1>Přidat zvíře</h1>
+        <div class="error">
+            <h4>@ViewBag.Error</h4>
+        </div>
+    <div class="form_div">
+        <div class="form">
+            @using (Html.BeginForm("AddAnimal","Administration", FormMethod.Post, new { enctype ="multipart/form-data" })) {
+                            <label>Jméno Zvířete (rodové a druhové)</label>
+                @Html.TextBoxFor(m => m.Animal.Name)
+                <label>Jméno zvířete (vlastní)</label>
+                @Html.TextBoxFor(m => m.Animal.AnimalName)
+                <label>Datum narození</label>
+                <input id="DateOfBirth" type="date" name ="DateOfBirth"/>
+                <label>Fotografie zvířete</label>
+                <input type="file" name="ImagePath" id="ImagePath" onchange="fileCheck(this);" accept="Image/*"/>  
+                <label>Druh zvířete</label>
+                <select name="IdAnimalType" id="IdAnimalType" required>
+                    @foreach(AnimalType type in Model.AnimalTypes) {
+                        <option value="@type.Id">@type.Name</option>
+                    }
+                </select>
+                <label>Pavilon</label>
+                <select name="IdPavilon" id="IdPavilon" required>
+                    @foreach (Pavilon pavilon in Model.Pavilons) {
+                        <option value="@pavilon.Id">@pavilon.Name</option>
+                    }
+                </select>
+                <button type="submit">Přidat</button>
+        }
+        </div>
+    </div>

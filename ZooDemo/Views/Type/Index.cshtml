@@ -1,0 +1,35 @@
+﻿@model ZooDemo.Models.TypeViewModel;
+
+@using System;
+@using ZooDemo.Objects;
+
+
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Seznam zvířat</title>
+    <link rel="stylesheet" href="/css/AnimalType.css"/>
+</head>
+<body>
+    <h1>Seznam chovaných druhů</h1>
+    <div class="animal_types">
+        @foreach(AnimalType type in Model.AnimalTypes) {
+            <div class="type">
+                <h3>@type.Name</h3>
+                <p>Popis: @type.Info</p>
+                <div class="animals">
+                    <p><strong>Seznam zvířat</strong></p>
+                    <ul>
+                        @foreach(Animal animal in type.AnimalsInType) {
+                            <li>@animal.Name</li>
+                        }
+                    </ul>
+                </div>
+            </div>
+        }
+    </div>
+</body>

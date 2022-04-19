@@ -1,0 +1,108 @@
+﻿@model ZooDemo.Models.AdministrationViewModel
+@using System.Text
+@using ZooDemo.Objects
+
+<link rel="stylesheet" href="/css/Administration.css"/>
+<h1>Administrace</h1>
+<div class="error">
+    <h3 class="error">@ViewBag.Error</h3>
+</div>
+<div class="tables">
+    <div class="animals">
+        <h2>Seznam zvířat</h2>
+        <div class="table">
+            <table>
+                <th>ID</th>
+                <th>Jméno</th>
+                <th>Jméno zvířete</th>
+                <th>Datum narození</th>
+                <th>Druh zvířete</th>
+                <th>Pavilon</th>
+                <th>Akce</th>
+                @foreach (Animal animal in Model.Animals) {
+                    <tr>
+                        <td>@animal.Id</td>
+                        <td>@animal.Name</td>
+                        <td>@animal.AnimalName</td>
+                        <td>@animal.DateOfBirth.ToString("dd/M/yyyy")</td>
+                        <td>@animal.AnimalType.Name</td>
+                        <td>@animal.Pavilon.Name</td>
+                        <td class="delete">@Html.ActionLink("Smazat", "DeleteAnimal", new {id = animal.Id}, null) @Html.ActionLink("Upravit", "UpdateAnimal", new {id = animal.Id}, null)</td>
+                    </tr>
+                }
+            </table>
+        </div>
+        <div class="add">
+                @Html.ActionLink("Přidat zvíře", "AddAnimal")
+        </div>
+        </div>
+        <hr/>
+        <div class="pavilons">
+            <h2>Seznam pavilonů</h2>
+            <div class="table">
+                <table>
+                    <th>ID</th>
+                    <th>Jméno</th>
+                    <th>Počet zvířat</th>
+                    <th>Zvířata v pavilonu</th>
+                    <th>Akce</th>
+                    @foreach(Pavilon pavilon in Model.Pavilon) {
+                        <tr>
+                            <td>@pavilon.Id</td>
+                            <td>@pavilon.Name</td>
+                            <td>@pavilon.AnimalsInPavilon.Count</td>
+                            @{
+                                StringBuilder sb = new StringBuilder();
+                                foreach(Animal animal in pavilon.AnimalsInPavilon) {
+                                    sb.AppendLine(animal.Name);
+                                }
+                                <td id="animals_in_pavilony">@sb.ToString()</td>
+                            }
+                            <div class="action">
+                        <td class="delete">@Html.ActionLink("Smazat", "DeletePavilon", new {id = pavilon.Id}, null) @Html.ActionLink("Upravit", "UpdatePavilon", new {id = pavilon.Id}, null)</td>
+                            </div>
+                        </tr>
+                    }
+                </table>
+            </div>
+            <div class="add">
+                @Html.ActionLink("Přidat pavilon", "AddPavilon")
+            </div>
+        </div>
+        <hr />
+        <div class="animal_types">
+            <h2>Druhy zvířat</h2>
+            <div class="table">
+                <table>
+                    <th>Id</th>
+                    <th>Jméno</th>
+                    <th>Informace</th>
+                    <th>Počet zvířat</th>
+                    <th>Zvířata v druhu</th>
+                    <th>Akce</th>
+                    @foreach (AnimalType type in Model.AnimalTypes)
+                   {
+                       <tr>
+                           <td>@type.Id</td>
+                           <td>@type.Name</td>
+                           <td>@type.Info</td>
+                           <td>@type.AnimalsInType.Count</td>
+                            @{
+                                StringBuilder sb = new StringBuilder();
+                                foreach(Animal animal in type.AnimalsInType) {
+                                    sb.AppendLine(animal.Name);
+                                }
+                                <td id="animals_in_type">@sb.ToString()</td>
+                            }
+                            <td class="delete">@Html.ActionLink("Smazat", "DeleteAnimalType", new {id = type.Id}, null) @Html.ActionLink("Upravit", "UpdateAnimalType", new {id = type.Id}, null)</td>
+                       </tr>
+                   }
+                </table>
+            </div>
+            <div class="add">
+                @Html.ActionLink("Přidat druh", "AddAnimalType")
+            </div>
+            <hr />
+        </div>
+    </div>
+</div>

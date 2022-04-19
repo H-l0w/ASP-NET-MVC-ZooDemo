@@ -1,0 +1,46 @@
+﻿@model ZooDemo.Models.AddUpdateAnimalViewModel
+@using ZooDemo.Objects;
+<link rel="stylesheet" href="/css/AddForm.css"/>
+
+<h1>Upravit zvíře - @Model.Animal.AnimalName</h1>
+        <div class="error">
+            <h4>@ViewBag.Error</h4>
+        </div>
+    <div class="form_div">
+        <div class="form">
+            @using (Html.BeginForm("UpdateAnimal","Administration", FormMethod.Post, new { enctype ="multipart/form-data" })) {
+                <label>Jméno Zvířete (rodové a druhové)</label>
+                <input type="text" name="name" id="name" required value="@Model.Animal.Name"/>
+                <label>Jméno zvířete (vlastní)</label>
+                <input type="text" name="AnimalName" id="AnimalName" required value="@Model.Animal.AnimalName"/>
+                <label>Datum narození</label>
+                <input id="DateOfBirth" type="date" name ="DateOfBirth" />
+                <label>Fotografie zvířete</label>
+                <input type="file" name="ImagePath" id="ImagePath" onchange="fileCheck(this);" accept="Image/*"/>  
+                <label>Druh zvířete</label>
+                <select name="IdAnimalType" id="IdAnimalType" required>
+                    @foreach(AnimalType type in Model.AnimalTypes) {
+                        if (type.Id == Model.Animal.IdAnimalType)
+                        {
+                            <option value="@type.Id" selected>@type.Name</option>
+                        }
+                    else {
+                        <option value="@type.Id">@type.Name</option>
+                    }
+                }
+                </select>
+                <label>Pavilon</label>
+                <select name="IdPavilon" id="IdPavilon" required>
+                    @foreach (Pavilon pavilon in Model.Pavilons) {
+                    if (pavilon.Id == Model.Animal.IdPavilon) {
+                        <option value="@pavilon.Id" selected>@pavilon.Name</option>                        
+                    }
+                    else {
+                        <option value="@pavilon.Id">@pavilon.Name</option>
+                    }
+                }
+            </select>
+            <button type="submit">Upravit</button>
+        }
+        </div>
+    </div>

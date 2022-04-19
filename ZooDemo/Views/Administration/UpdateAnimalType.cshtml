@@ -1,0 +1,19 @@
+﻿@model ZooDemo.Objects.AnimalType
+@using ZooDemo.Objects;
+<link rel="stylesheet" href="/css/AddForm.css"/>
+
+<h1>Upravit druh - @Model.Name</h1>
+    <div class="error">
+        <h4>@ViewBag.Error</h4>
+    </div>
+<div class="form_div">
+    <div class="form">
+        @using (@Html.BeginForm("UpdateAnimalType", "Administration", FormMethod.Post)){
+        <label>Jméno druhu</label>
+        <input type="text" name="Name" id="Name" value="@Model.Name"/>
+        <label>Informace o druhu</label>
+        <textarea name="Info" id="Info">@Model.Info</textarea>
+        <button type="submit">Upravit</button>
+    }
+    </div>
+</div>

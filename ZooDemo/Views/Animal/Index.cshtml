@@ -1,0 +1,44 @@
+﻿@model ZooDemo.Models.AnimalsViewModel
+
+@using ZooDemo.Objects
+
+
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Seznam zvířat</title>
+    <link rel="stylesheet" href=~/css/Animals.css/>
+</head>
+<body>
+
+    <h1>Seznam zvířat</h1>
+    <div class="search">
+        <form action="/Animal/Search" method="post">
+            <input type="search" name="Search" placeholder="Sem zadejte hledaný výraz"/>
+            <button type="submit">Vyhledat</button>
+        </form>
+        @Html.ActionLink("Zrušit vyhledávání", "Index")
+    </div>
+    <div class="animals">
+        @foreach(Animal animal in Model.Animals) {
+        <div class="animal">
+            <h3>@animal.Name</h3>
+               @{
+                    string path = "/Images/" + animal.ImagePath;
+                }
+            <img src=@path>            
+            <div class="animal_info">
+                <p>Jméno: <strong>@animal.AnimalName</strong></p>
+                <p>Datum narození: @animal.DateOfBirth.ToString("dd/M/yyyy")</p>
+                <p>Druh: @animal.AnimalType.Name</p>
+                <p>Pavilon: @animal.Pavilon.Name</p>
+            </div>
+        </div>
+
+    }
+    </div>
+</body>

@@ -1,0 +1,40 @@
+﻿h1{
+    text-align:center;
+}
+
+.pavilons{
+    display:flex;
+    gap:25px;
+    flex-wrap: wrap;
+}
+
+body{
+    margin: 0 auto;
+    max-width: 1200px;
+}
+
+.pavilon {
+    box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
+    padding: 15px;
+}
+
+h3{
+    text-align:center;
+}
+
+h4{
+    text-align:center;
+}
+
+.animals_in_pavilon{
+    overflow: auto;
+    max-height: 200px
+}
+
+p{
+    margin: 0px;
+}
+
+li{
+    margin: 0;
+}

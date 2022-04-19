@@ -1,0 +1,44 @@
+﻿body {
+    margin: 0 auto;
+}
+
+h1{
+    text-align:center;
+}
+
+.form_div{
+    display:flex;
+    justify-content:center;
+}
+
+.form form{
+    box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
+    width: 300px;
+    display:flex;
+    flex-direction:column;
+    padding: 15px;
+}
+
+input{
+    text-align:center;
+    margin-bottom: 15px;
+}
+
+label{
+    text-align:center;
+}
+
+textarea {
+    resize: none;
+    margin-bottom: 15px;
+}
+
+select {
+    margin-bottom: 15px;
+}
+
+.error{
+    margin: 0 auto;
+    text-align:center;
+    color:red;
+}
