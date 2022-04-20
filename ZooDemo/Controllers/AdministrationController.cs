@@ -108,11 +108,11 @@ namespace ZooDemo.Controllers
             }
         }
 
-        public IActionResult AddAnimal(Animal animal)
+        public IActionResult AddAnimal([FromForm]Animal animal)
         {
             if (!User.Identity.IsAuthenticated)
                 return Redirect("/Home/Index");
-            if (animal.Name == null) //|| animal.AnimalName == null || animal.AnimalType == null || animal.Pavilon == null
+            if (animal.Name == null)
             {
                 AddUpdateAnimalViewModel model = new AddUpdateAnimalViewModel();
                 model.Pavilons = _pavilonRepo.GetPavilons();
@@ -128,17 +128,18 @@ namespace ZooDemo.Controllers
                     return View(model);
                 }
 
-                var file = Request.Form.Files["ImagePath"];
+                var file = Request.Form.Files["Animal.ImagePath"];
                 Stream stream = file.OpenReadStream();
 
                 var form = Request.Form;
                 Animal animalFromFile = new Animal();
                 animal.Name = form["Animal.Name"];
                 animal.AnimalName = form["Animal.AnimalName"];
-                animal.DateOfBirth = Convert.ToDateTime(form["DateOfBirth"]);
-                animal.IdPavilon = Convert.ToInt32(form["IdPavilon"]);
-                animal.IdAnimalType = Convert.ToInt32(form["IdAnimalType"]);
+                animal.DateOfBirth = Convert.ToDateTime(form["Animal.DateOfBirth"]);
+                animal.IdPavilon = Convert.ToInt32(form["Animal.IdPavilon"]);
+                animal.IdAnimalType = Convert.ToInt32(form["Animal.IdAnimalType"]);
                 animal.ImagePath = animal.AnimalName + animal.Name + ".png";
+                animal.ImagePath = animal.ImagePath.Replace(' ', '_');
                 _animalRepo.Add(animal);
                 _imageRepo.AddImage(stream, animal.ImagePath);
                 return Redirect("/Administration");

@@ -1,5 +1,4 @@
 ﻿@model ZooDemo.Models.AdministrationViewModel
-@using System.Text
 @using ZooDemo.Objects
 
 <link rel="stylesheet" href="/css/Administration.css"/>
@@ -44,20 +43,12 @@
                     <th>ID</th>
                     <th>Jméno</th>
                     <th>Počet zvířat</th>
-                    <th>Zvířata v pavilonu</th>
                     <th>Akce</th>
                     @foreach(Pavilon pavilon in Model.Pavilon) {
                         <tr>
                             <td>@pavilon.Id</td>
                             <td>@pavilon.Name</td>
                             <td>@pavilon.AnimalsInPavilon.Count</td>
-                            @{
-                                StringBuilder sb = new StringBuilder();
-                                foreach(Animal animal in pavilon.AnimalsInPavilon) {
-                                    sb.AppendLine(animal.Name);
-                                }
-                                <td id="animals_in_pavilony">@sb.ToString()</td>
-                            }
                             <div class="action">
                         <td class="delete">@Html.ActionLink("Smazat", "DeletePavilon", new {id = pavilon.Id}, null) @Html.ActionLink("Upravit", "UpdatePavilon", new {id = pavilon.Id}, null)</td>
                             </div>
@@ -78,7 +69,6 @@
                     <th>Jméno</th>
                     <th>Informace</th>
                     <th>Počet zvířat</th>
-                    <th>Zvířata v druhu</th>
                     <th>Akce</th>
                     @foreach (AnimalType type in Model.AnimalTypes)
                    {
@@ -87,13 +77,6 @@
                            <td>@type.Name</td>
                            <td>@type.Info</td>
                            <td>@type.AnimalsInType.Count</td>
-                            @{
-                                StringBuilder sb = new StringBuilder();
-                                foreach(Animal animal in type.AnimalsInType) {
-                                    sb.AppendLine(animal.Name);
-                                }
-                                <td id="animals_in_type">@sb.ToString()</td>
-                            }
                             <td class="delete">@Html.ActionLink("Smazat", "DeleteAnimalType", new {id = type.Id}, null) @Html.ActionLink("Upravit", "UpdateAnimalType", new {id = type.Id}, null)</td>
                        </tr>
                    }
