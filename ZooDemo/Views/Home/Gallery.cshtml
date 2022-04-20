@@ -1,0 +1,32 @@
+﻿@using Microsoft.AspNetCore.Identity
+@using ZooDemo.Objects
+@model ZooDemo.Models.GalleryViewModel
+@inject SignInManager<IdentityUser> SignInManager
+
+
+<link rel="stylesheet" href="~/css/Gallery.css" />
+<div class="gallery">
+    @if (SignInManager.IsSignedIn(User)){
+        <div class="form_div">
+           @using (Html.BeginForm("AddImageGallery", "Home", FormMethod.Post, new { enctype ="multipart/form-data" })){
+                <label>Přidat obrázek</label>
+                <input type="file" name="ImagePath" id="ImagePath" onchange="fileCheck(this);" accept="Image/*"/>
+                <label>Popis</label>
+                <textarea name="Image.Description"></textarea>
+                <button id="sub" type="submit">Přidat</button>
+           }
+        </div>
+    }
+    <div class="images">
+         @foreach(Image image in @Model.Images) {
+            <div class="image">
+                <a href="@image.Name" target="_blank"><img src="@image.Name"></a>
+                <p>@image.Description</p>
+                <p>@image.Added.ToString("yyyy/M/dd")</p>
+                @if(SignInManager.IsSignedIn(User)){
+                    @Html.ActionLink("Smazat", "DeleteImage", new {name = image.Name}, null)
+                }
+            </div>
+            }
+    </div>
+</div>

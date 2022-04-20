@@ -1,0 +1,67 @@
+﻿body {
+    margin: 0 auto;
+    max-width: 1350px;
+}
+
+.images {
+    display:flex;
+    gap: 10px;
+    flex-wrap: wrap;
+    width: 1320px;
+}
+
+img {
+    width: 370px;
+    height: 270px;
+}
+
+.image {
+    box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
+    padding: 15px;
+}
+
+p{
+    text-align:center;
+    margin:0;
+}
+
+textarea{
+    resize:none;
+    height:100px;
+}
+
+.form_div {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 50px;
+    box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
+    padding: 15px;
+    width: 450px;
+    justify-content: center;
+    text-align: center;
+    margin: 50px auto;
+}
+
+form{
+    display:flex;
+    flex-direction:column;
+    justify-content:center;
+}
+
+.gallery {
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+}
+
+#sub {
+    margin-top: 15px;
+}
+
+#ImagePath{
+    margin: 0 auto;
+}
+
+input{
+    text-align:center;
+}

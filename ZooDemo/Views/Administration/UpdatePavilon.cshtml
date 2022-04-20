@@ -10,7 +10,7 @@
     <div class="form">
         @using (@Html.BeginForm("UpdatePavilon", "Administration", FormMethod.Post)){
         <label>Jméno pavilonu</label>
-        <input type="text" name="Name" id="Name"/>
+        <input type="text" name="Name" id="Name" value="@Model.Name"/>
         <button type="submit">Upravit</button>
     }
     </div>

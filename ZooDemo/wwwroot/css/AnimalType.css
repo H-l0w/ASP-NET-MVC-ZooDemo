@@ -6,7 +6,8 @@
 .animal_types {
     display: flex;
     gap: 25px;
-    flex-wrap:wrap;
+    flex-wrap: wrap;
+    width: 1320px;
 }
 
 .type {

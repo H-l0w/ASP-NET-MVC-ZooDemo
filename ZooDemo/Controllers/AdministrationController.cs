@@ -72,54 +72,72 @@ namespace ZooDemo.Controllers
         }
         #endregion
         #region Add
-        public IActionResult AddAnimalType(AnimalType animal)
+        [HttpGet]
+        public IActionResult AddAnimalType()
         {
             if (!User.Identity.IsAuthenticated)
                 return Redirect("/Home/Index");
-            if (animal.Info == null || animal.Name == null)
-                return View();
-            else {
-                if (!_animalTypeRepo.Exists(animal.Name)) {
-                    _animalTypeRepo.Add(animal);
-                    return Redirect("/Administration");
-                }
-                else {
-                    ViewBag.Error = "Zadaný druh již existuje";
-                    return View();
-                }
-            }
+            return View();
         }
-        
-        public IActionResult AddPavilon(Pavilon pavilon)
+
+        [HttpPost]
+        public IActionResult AddAnimalType([FromForm] AnimalType animal)
         {
             if (!User.Identity.IsAuthenticated)
                 return Redirect("/Home/Index");
-            if (pavilon.Name == null)
-                return View();
+
+            if (!_animalTypeRepo.Exists(animal.Name)) {
+                _animalTypeRepo.Add(animal);
+                return Redirect("/Administration");
+            }
             else {
-                if (!_pavilonRepo.Exists(pavilon.Name)) {
-                    _pavilonRepo.Add(pavilon);
-                    return Redirect("/Administration");
-                }
-                else {
-                    ViewBag.Error = "Zadaný pavilon již existuje";
-                    return View();
-                }
+                ViewBag.Error = "Zadaný druh již existuje";
+                return View();
             }
         }
 
+        [HttpGet]
+        public IActionResult AddPavilon()
+        {
+            if (!User.Identity.IsAuthenticated)
+                return Redirect("/Home/Index");
+            return View();
+        }
+
+        [HttpPost]
+        public IActionResult AddPavilon([FromForm] Pavilon pavilon)
+        {
+            if (!User.Identity.IsAuthenticated)
+                return Redirect("/Home/Index");
+
+            if (!_pavilonRepo.Exists(pavilon.Name)) {
+                _pavilonRepo.Add(pavilon);
+                return Redirect("/Administration");
+            }
+            else {
+                ViewBag.Error = "Zadaný pavilon již existuje";
+                return View();
+            }
+        }
+
+        [HttpGet]
+        public IActionResult AddAnimal()
+        {
+            if (!User.Identity.IsAuthenticated)
+                return Redirect("/Home/Index");
+
+            AddUpdateAnimalViewModel model = new AddUpdateAnimalViewModel();
+            model.Pavilons = _pavilonRepo.GetPavilons();
+            model.AnimalTypes = _animalTypeRepo.GetAnimalTypes();
+            return View(model);
+        }
+
+        [HttpPost]
         public IActionResult AddAnimal([FromForm]Animal animal)
         {
             if (!User.Identity.IsAuthenticated)
                 return Redirect("/Home/Index");
-            if (animal.Name == null)
-            {
-                AddUpdateAnimalViewModel model = new AddUpdateAnimalViewModel();
-                model.Pavilons = _pavilonRepo.GetPavilons();
-                model.AnimalTypes = _animalTypeRepo.GetAnimalTypes();
-                return View(model);
-            }
-            else {
+
                 if (_animalRepo.Exists(animal)) {
                     ViewBag.Error = "Zadané zvíře již existuje";
                     AddUpdateAnimalViewModel model = new AddUpdateAnimalViewModel();
@@ -143,89 +161,93 @@ namespace ZooDemo.Controllers
                 _animalRepo.Add(animal);
                 _imageRepo.AddImage(stream, animal.ImagePath);
                 return Redirect("/Administration");
-            }
         }
         #endregion
         #region Update
+
+        [HttpGet]
         public IActionResult UpdateAnimal(int id)
         {
-            //needs to be done
             if (!User.Identity.IsAuthenticated)
                 return Redirect("/Home/Index");
 
-            if (!Request.HasFormContentType) {
-                AddUpdateAnimalViewModel model = new AddUpdateAnimalViewModel();
-                model.Pavilons = _pavilonRepo.GetPavilons();
-                model.AnimalTypes = _animalTypeRepo.GetAnimalTypes();
-                model.Animal = _animalRepo.GetAnimal(new Animal(id));
-                return View(model);
-            }
-            //update
-            else {
-                //update without date and image
-                Animal animal = new Animal();
-                animal.Id = id;
-                animal.Name = Request.Form["Name"];
-                animal.AnimalName = Request.Form["AnimalName"];
-                animal.DateOfBirth = Request.Form["DateOfBirth"] == "" ? DateTime.Now : Convert.ToDateTime(Request.Form["DateOfBirth"]); 
-                animal.ImagePath = Request.Form.Files.Count > 0 ? Request.Form.Files["ImagePath"].FileName : "";
-                animal.IdAnimalType = Convert.ToInt32(Request.Form["IdAnimalType"]);
-                animal.IdPavilon = Convert.ToInt32(Request.Form["IdPavilon"]);
-
-                if (Request.Form["DateOfBirth"] == "" && Request.Form["ImagePath"] == "") { //update without image and dateofbirth
-                    _animalRepo.UpdateWithoutDateAndPhoto(animal);
-                }
-                else if (Request.Form["ImagePath"] == "") { //update without image
-                    _animalRepo.UpdateWithoutPhoto(animal);
-                }
-                else if (Request.Form["DateOfBirth"] == "") { //update without dateofbirth
-
-                }
-                else { //full update
-                    animal.ImagePath = animal.AnimalName + animal.Name + ".png";
-                    string oldImageName = _animalRepo.GetImagePathForAnimal(animal.Id);
-                    var file = Request.Form.Files["ImagePath"];
-
-                    _imageRepo.UpdateImage(oldImageName, animal.ImagePath, file.OpenReadStream());
-                    _animalRepo.Upadte(animal);
-                }
-                return Redirect("/Administration");
-            }
+            AddUpdateAnimalViewModel model = new AddUpdateAnimalViewModel();
+            model.Pavilons = _pavilonRepo.GetPavilons();
+            model.AnimalTypes = _animalTypeRepo.GetAnimalTypes();
+            model.Animal = _animalRepo.GetAnimal(new Animal(id));
+            return View(model);
         }
+
+        [HttpPost]
+        public IActionResult UpdateAnimal(int id, [FromForm]Animal a)
+        {
+            if (!User.Identity.IsAuthenticated)
+                return Redirect("/Home/Index");
+
+            //update
+            //update without date and image
+            a.Id = id;
+            a.ImagePath = Request.Form.Files.Count > 0 ? Request.Form.Files["ImagePath"].FileName : "";
+
+            if (Request.Form["Animal.DateOfBirth"] == "" && Request.Form["ImagePath"] == "") { //update without image and dateofbirth
+                _animalRepo.UpdateWithoutDateAndPhoto(a);
+            }
+            else if (Request.Form["ImagePath"] == "") { //update without image
+                _animalRepo.UpdateWithoutPhoto(a);
+            }
+            else if (Request.Form["Animal.DateOfBirth"] == "") { //update without dateofbirth
+
+            }
+            else { //full update
+                a.ImagePath = a.AnimalName + a.Name + ".png";
+                string oldImageName = _animalRepo.GetImagePathForAnimal(a.Id);
+                var file = Request.Form.Files["ImagePath"];
+
+                _imageRepo.UpdateImage(oldImageName, a.ImagePath, file.OpenReadStream());
+                _animalRepo.Upadte(a);
+            }
+            return Redirect("/Administration");
+        }
+
+        [HttpGet]
         public IActionResult UpdatePavilon(int id)
         {
             if (!User.Identity.IsAuthenticated)
                 return Redirect("/Home/Index");
 
-            if (!Request.HasFormContentType) {
-                Pavilon model = new Pavilon();
-                model = _pavilonRepo.GetPavilon(new Pavilon(id));
-                return View(model);
-            }
-            else {
-                Pavilon pavilon = new Pavilon(id);
-                pavilon.Name = Request.Form["Name"];
-                _pavilonRepo.Upadte(pavilon);
-                return Redirect("/Administration");
-            }
+            Pavilon model = new Pavilon();
+            model = _pavilonRepo.GetPavilon(new Pavilon(id));
+            return View(model);
         }
+
+        [HttpPost]
+        public IActionResult UpdatePavilon(int id, [FromForm] Pavilon p)
+        {
+            p.Id = id;
+            _pavilonRepo.Upadte(p);
+            return Redirect("/Administration");
+        }
+
+        [HttpGet]
         public IActionResult UpdateAnimalType(int id)
         {
             if (!User.Identity.IsAuthenticated)
                 return Redirect("/Home/Index");
 
-            if (!Request.HasFormContentType) {
-               AnimalType model = new AnimalType(id);
-               model = _animalTypeRepo.GetAnimalType(new AnimalType(id));
-                return View(model);
-            }
-            else {
-                AnimalType type = new AnimalType();
-                type.Name = Request.Form["Name"];
-                type.Info = Request.Form["Info"];
-                _animalTypeRepo.Update(type);
-                return Redirect("/Administration");
-            }
+            AnimalType model = new AnimalType(id);
+            model = _animalTypeRepo.GetAnimalType(new AnimalType(id));
+            return View(model);
+        }
+
+        [HttpPost]
+        public IActionResult UpdateAnimalType(int id, [FromForm] AnimalType t)
+        {
+            if (!User.Identity.IsAuthenticated)
+                return Redirect("/Home/Index");
+
+            t.Id = id;
+            _animalTypeRepo.Update(t);
+            return Redirect("/Administration");
         }
         #endregion
     }
